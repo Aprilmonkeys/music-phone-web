@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>手机端滑屏</title>
+		<style type="text/css">
+				* {
+				margin: 0;
+				padding: 0;
+			}
+			/*取消系统默认滚动条 滚轮 
+			 * 
+			}*/
+			
+			/*html,
+			body {
+				height: 100%;
+				overflow: hidden;
+				}*/
+				#wrap {
+					width: 100%;
+					height: 100%;
+					position: relative;
+				}
+				#content {
+					position: absolute;
+					top: 0;
+					left: 0;
+				}
+		</style>
+		<!--
+			移动端滑屏
+			1,meta,取消系统默认
+		-->
+	</head>
+
+	<body>
+		<div id="wrap">
+			<div id="content">
+			</div>
+		</div>
+		<script>
+			//取消系统默认行为  长按内容弹出复制窗口的
+			document.addEventListener('touchstart', function(event) {
+				event.preventDefault();
+			})
+			var content = document.getElementById('content');
+			//添加文本
+			var text = '';
+			for(var i = 0; i < 100; i++) {
+				text += i + '<br>';
+			}
+			content.innerHTML = text;
+			//添加滚动条 为wrap绑定
+			//定义元素初始位,手指初始位置,置变量
+			var eleY = 0;
+			var startY = 0
+
+			wrap.addEventListener('touchstart', function(event) {
+				var touch = event.changedTouches[0]; //changedTouches 是数组 要用索引
+				//找 元素初始位置 和手指初始位
+				var eleY = content.offsetTop;
+				var startY = touch.clientY;
+			})
+			wrap.addEventListener('touchmove', function(event) {
+				//找 元素结束位置 和手指结束位值
+				var endY = touch.clientY;
+				var disY = endY - startY;
+				//元素移动的距离
+				//做上下限定 判断disY+eleY来做上下的界限限定 鼠标的偏移量 内容在上边的是负值
+				var top = disY + eleY;
+				if(top > 0) {
+					top = 0
+				}
+				if(top < document.documentElement.clientHeight - content.offsetHeight) {
+					top = document.documentElement.clientHeight - content.offsetHeight
+				}
+				content.style.top = disY + eleY + 'px';
+			})
+		</script>
+	</body>
+
+</html>

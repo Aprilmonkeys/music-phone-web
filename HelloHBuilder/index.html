@@ -1,0 +1,75 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <title>baidu</title>
+    <style>
+        .wrap {
+            width: 750px;
+            height: 200px;
+            margin:0 auto;
+        }
+        .logo {
+            width: 200px;
+            height: 100px;
+            background-image: url("bd_logo1.png");
+            background-size: 200px 100px;
+            margin:0 auto;
+        }
+        .search {
+            width: 600px;
+            height: 40px;
+            margin:20px auto;
+
+        }
+        .search input {
+            outline:none;
+        }
+        #left,#right {
+        	 float: left;
+        }
+        #left input {
+            width: 500px;
+            height: 34px;
+            border:1px solid #b6b6b6;
+            border-right:0;
+            text-indent: 1em;
+        }
+       #left input:focus{ border:1px solid #3385ff; }
+
+        #right input {
+            width: 88px;
+            height: 38px;
+            font-size: 14px;
+            color: #dddddd;
+            cursor: pointer;
+            background: #3385ff;
+            border:none;
+            margin-left: -5px;
+        }
+        #right a {
+            text-decoration: none;
+            color: #dddddd;
+           
+        }
+
+    </style>
+</head>
+<body>
+<div class="wrap">
+    <div class="logo">
+    </div>
+    <div class="search">
+        <div id="left" >
+            <input id='left-input' type="text"  >
+
+        </div>
+        <div id="right">
+           <a href="https://www.baidu.com/"><input type="submit" value="百度一下"></a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no" />
+		<title>横向滑屏</title>
+		<style type="text/css">
+			* {
+				margin: 0;
+				padding: 0;
+			}
+			
+			html,
+			body {
+				height: 100%;
+				overflow: hidden;
+			}
+			
+			#wrap {
+				/*子元素定位 父元素高度塌陷 解决办法只能给父元素一个高度*/
+				/*height: 170px;*/
+				width: 100%;
+				position: relative;
+			}
+			
+			#list {
+				list-style: none;
+				/*width: 500%;*/
+				/* 解决 子元素开启了浮动父元素高度是0 */
+				overflow: hidden;
+				position: absolute;
+				top: 0;
+				left: 0;
+			}
+			
+			#list li {
+				/*width: 20%;*/
+				float: left;
+			}
+			
+			#list img {
+				display: block;
+				width: 100%;
+				transition: none;
+			}
+			
+			#point {
+				width: 100%;
+				position: absolute;
+				left: 0;
+				bottom: 10px;
+				height: 10px;
+				text-align: center;
+			}
+			
+			#point span {
+				display: inline-block;
+				width: 10px;
+				height: 10px;
+				border-radius: 50%;
+				background: #CCCCCC;
+			}
+			
+			#point .diff {
+				background: red;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="wrap">
+
+			<ul id="list">
+				<li>
+					<img src="img/1.jpg" alt="" />
+				</li>
+				<li>
+					<img src="img/2.jpg" alt="" />
+				</li>
+				<li>
+					<img src="img/3.jpg" alt="" />
+				</li>
+				<li>
+					<img src="img/4.jpg" alt="" />
+				</li>
+				<li>
+					<img src="img/5.jpg" alt="" />
+				</li>
+			</ul>
+			<!--添加小圆点-->
+			<div id="point">
+				<!--老师说小的图标都要用span写-->
+				<span class='diff'></span>
+				<span></span>
+				<span></span>
+				<span></span>
+				<span></span>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript">
+		document.addEventListener('touchstart', function(event) {
+			event.preventDefault();
+		})
+		//无缝轮播 1,动态加5个图片2用index控制list偏移量3更改小圆点
+		window.onload = function() {
+			// 因为加图片的个数是动态的 要给元素动态的加宽度 
+			var list = document.getElementById('list');
+			var wrap = document.getElementById('wrap');
+			//创建一个新的style标签
+			var styleNodes = document.createElement('style');
+			//无缝轮播要10个图片 动态添加5个图片 
+			list.innerHTML+=list.innerHTML;
+			var li = document.querySelectorAll('#list li'); //得到的是数组
+			var spans = document.querySelectorAll('#point span');
+			//width 后边是:  这是布局
+			styleNodes.innerHTML += '#list {width:' + li.length + '00%}';
+			//注意 这里要使用+= 否则没办法完成ul 和li 同步动态加成
+			styleNodes.innerHTML += '#list li {width:' + 100 / (li.length) + '%}';
+			//给父元素 wrap动态添加一个高度 和子元素一样大小的高度
+			styleNodes.innerHTML += '#wrap {height:' + li[0].offsetHeight + 'px}'
+			styleNodes.innerHTML += '#list {transition:1s;}'
+			document.head.appendChild(styleNodes);
+			//为wrap绑定监听事件
+			//定义初始元素位置 手指位置
+			var eleX = 0;
+			var startX = 0;
+			var disX = 0;
+			//实时保存 translateX 产生的值
+			var translateX = 0;
+			wrap.addEventListener('touchstart', function(event) {
+			list.style.transition='none';
+				//确定元素的初始位置 手指的初始位置
+				var touch = event.changedTouches[0];
+				eleX = translateX;
+				startX = touch.clientX;
+				
+//				var left=disX + translateX;
+//				index = Math.round(-left / document.documentElement.clientWidth);
+//				list.style.transform='translateX('+ -index*document.documentElement.clientWidth+'px)'
+				
+			})
+			wrap.addEventListener('touchmove', function(event) {
+				var touch = event.changedTouches[0];
+				//元素结束位置 鼠标结束位置
+				var endX = touch.clientX;
+				disX = endX - startX;
+				translateX = disX + eleX;
+				list.style.transform = 'translateX(' + translateX + 'px)';
+			})
+			wrap.addEventListener('touchend', function(event) {
+				var touch = event.changedTouches[0];
+				//定义一个index 来表示滑动图片要滑动到第几个图片
+				//这个图片滑动到第几张是list根据父元素的相对位置来判断的 
+				//定义图片的初始位置是在第0张
+				var index = 0;
+				var left = disX + translateX;
+				//图片的位置index值是几 图片就滑动到第几张上
+				index = Math.round(-left / document.documentElement.clientWidth); //正
+				//限定index的范围
+				if(index < 0) {
+					index = 0;
+				} else if(index > 4) {
+					index = 4;
+				}
+				//添加过渡
+				list.style.transition='1s';
+				//元素的跳转位置
+				translateX = -index * document.documentElement.clientWidth
+				list.style.transform = 'translateX(' + translateX + 'px)'
+				//小圆点是在end里的事件 要写在里边
+				//用for动态的添加小圆点
+				//获取小圆点
+
+				for(var i = 0; i < spans.length; i++) {
+
+					//给所有的span的样式添加diff的样式
+					spans[i].className = '';
+				}
+				spans[index].className = 'diff';
+
+			})
+		}
+	</script>
+
+</html>

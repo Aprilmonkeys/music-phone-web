@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>mobile</title>
+	</head>
+	<body>
+		<div class="outer">
+			我里边有很多的文字, 我不想全部显示
+		    我里边有很多的文字, 我不想全部显示
+			我里边有很多的文字, 我不想全部显示
+
+			<div class="inner">
+				i am a good boy;
+				i am a good boy 
+				i am a good boy
+			</div>
+		</div>
+		<script>
+//			var width = document.documentElement.clientWidth;
+//			console.log(width);
+//      需求是要 父元素不能输出默认模式 子元素可以
+     var outer=document.getElementsByClassName('outer')[0];
+     var inner=document.getElementsByClassName('inner')[0];
+     outer.addEventListener('touchstart',function(event){
+     	//加一个touch事件
+     	event.preventDefault();
+     	console.log('111')
+     })
+			inner.addEventListener('touchstart',function(event){
+				//阻止父元素的冒泡行为 使子元素可以发生默认事件
+				event.stopPropagation();
+				console.log('222')
+			})
+		</script>
+	</body>
+</html>

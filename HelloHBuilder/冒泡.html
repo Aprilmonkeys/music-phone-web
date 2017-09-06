@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			#parent {
+				width: 100px;
+				height: 100px;
+				background: #FF0000;
+			}
+			#child {
+				width: 50px;
+				height: 50px;
+				background: #3385FF;
+			}
+		</style>
+	</head>
+	<body>
+		<!--<div id="parent">
+　　<div id="child" class="child"></div>
+       </div>-->
+       	<ul id='ul'>
+            <li>item1</li>
+            <li>item2</li>
+            <li>item3</li>
+            <li>item4</li>
+            <li>item5</li>
+            <li>item6</li>
+        </ul>
+       
+       
+	</body>
+	<script type="text/javascript">
+//		 document.getElementById("parent").addEventListener("click",function(e){
+//              console.log("parent事件被触发，"+this.id);
+//          })
+//          document.getElementById("child").addEventListener("click",function(e){
+//              console.log("child事件被触发，"+this.id)
+//          })
+			var ul=document.getElementById('ul');
+			var lis=document.querySelectorAll('li');
+			ul.onclick=function(){
+				this.style.background='red';
+			}
+
+	</script>
+</html>
+	</head>
+	<body>
+	</body>
+</html>

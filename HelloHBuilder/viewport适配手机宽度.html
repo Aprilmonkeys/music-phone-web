@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no"/>
+		<title>viewport适配手机的宽度</title>
+	</head>
+	<style type="text/css">
+		/*现在手机的宽度默认是980需要加meta进行转换成设备独立像素*/
+		
+		*{
+			margin: 0;
+			padding: 0;
+		}
+		#box {
+			width: 200px;
+			height: 200px;
+			background-color: #3385FF;
+		}
+	</style>
+	<body>
+		<!--viewport给出固定值之后 利用meta的属性content的属性值 width=device-width ,或者initial-scale=1.0缩放比例来做适配-->
+	<div id="box">
+		我是一个盒子
+	</div>
+	<script>
+		var targetW=320;
+		//可以直接设置width=320;但是写死了的话,换一个型号的手机就会出问题 要使用initial-scale比例来做
+		var width=document.documentElement.clientWidth;
+		//这个比例是谁比上谁要考虑的是320 变375 其中320是变量 375是固定的值 320 变375是要放大倍数 所以是375/320
+		var scale=width/targetW;
+		//获取到meta标签 更改标签属性
+		var meta =document.querySelector('meta[name="viewport"]');
+		meta.setAttribute('content','initial-scale='+scale);
+		document.head.appendChild(meta);
+		
+	</script>
+	
+	</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>滚动条原始版</title>
+		<style type="text/css">
+			* {
+				margin: 0;
+				padding: 0;
+			}
+			
+			#wrap {
+				width: 40px;
+				height: 100%;
+				background-color: #CCCCCC;
+				position: absolute;
+				top: 0;
+				right: 0;
+			}
+			
+			#inner {
+				width: 40px;
+				height: 60px;
+				background-color: #3385FF;
+				position: absolute;
+				top: 0;
+				left: 0;
+			}
+			/*取消系统默认的滚动条*/
+			
+			html,
+			body {
+				overflow: hidden;
+				height: 100%;
+			}
+			
+			#content {
+				position: absolute;
+				width: 100%;
+				top: 0;
+				left: 0;
+			}
+		</style>
+
+	</head>
+
+	<body>
+		<div id="content">
+
+		</div>
+		<div id="wrap">
+			<div id="inner"></div>
+		</div>
+		<script>
+			//给inner动态添加内容 添加数字
+			var inner = document.getElementById('inner');
+			var content = document.getElementById('content');
+			var str = '';
+			for(var i = 0; i < 1000; i++) {
+				str += i + '<br>';
+			}
+			content.innerHTML = str;
+			var scale = document.documentElement.clientHeight / content.offsetHeight;
+			//如果不给滑块一个动态的高度 会让内容显示不全
+			inner.style.height = document.documentElement.clientHeight * scale + 'px';
+			inner.onmousedown = function(e) {
+				//inner距离父元素的初始位置
+				var innertop = inner.offsetTop;
+				//鼠标的初始位置
+				var mousetop = e.clientY;
+				document.onmousemove = function(e) {
+					//鼠标的最终位置
+					var mouseend = e.clientY;
+					//inner 的偏移量
+					var top = mouseend - mousetop + innertop;
+					//加判断条件  判断inner 的位置
+					if(top < 0) {
+						top = 0
+					} else if(top > document.documentElement.clientHeight - inner.offsetHeight) {
+						top = document.documentElement.clientHeight - inner.offsetHeight
+					}
+					inner.style.top = top + 'px';
+					//给content 动态加一个高度 按比例添加的
+					//var scale=Top/(document.documentElement.clientHeight);
+					//scale=滑块走过的距离/视口高度-滑块高度(滑块能走的最大距离)
+					//	content.style.top=-(content.offsetHeight-document.documentElement.clientHeight)*scale+'px';
+					//	下边的这个公式 会使内容区有一段距离显示不全  要想使用 必须给滑块动加一个高度 才能没问题
+					content.style.top = -top / scale + 'px';
+				}
+				document.onmouseup = function() {
+					document.onmousemove = null;
+					document.onmouseup = null;
+				}
+				return false;
+			}
+		</script>
+	</body>
+
+</html>

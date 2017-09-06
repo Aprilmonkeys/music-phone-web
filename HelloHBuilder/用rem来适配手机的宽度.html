@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no"/>
+		<title>rem适配手机的宽度</title>
+		<style type="text/css">
+			* {
+				margin:0 ;
+				padding: 0;
+			}
+			/*要实现手机适配 等比例显示 1,把所有单位改成rem,把所有的不同型号的手机转换到一个固定的宽度来动态改变内一个值
+			 2动态的添加style标签   宗旨 是利用 1rem=16px*/
+			#box{
+				width: 0.5rem;
+				height: 0.5rem;
+				background-color: #3385FF;
+	
+			}
+			
+		</style>
+	</head>
+	<body>
+		<div id="box">
+			我是一个枣树
+		</div>
+		<script type="text/javascript">
+		//先动态获取布局视口的宽度
+			var width=document.documentElement.clientWidth;
+			//动态创建 style的标签
+			var styleN= document.createElement('style');
+			//给style标签添加内容 有个width 是要用拼串来写 先写一个数字 之后再最后添加  为了不出小数 可以把宽度/16 分成多少份
+			//这里是用字体大小来表示宽度的,如果不除以16的话 整个页面的字体都会很大 
+			styleN.innerHTML='html {font-size: '+width/16+'px !important;}'
+			//动态的把styleN添加到head里
+			document.head.appendChild(styleN);
+		</script>
+	</body>
+</html>

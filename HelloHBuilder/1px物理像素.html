@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no"/>
+		<title></title>
+		<style type="text/css">
+			/*
+			 想要达到用1px物理像素进行适配
+			 1同时设置css的像素值是 rem  所以也要使用rem 来进行适配
+			 设置一个固定的border的物理像素是1px  
+			 在转换的时候 要显示的效果一样 不能改变盒子的大小
+		
+			 */
+			* {
+				margin: 0;
+				padding: 0;
+			}
+			#box {
+				width: 8rem;
+				height: 8rem;
+				border: 1px solid black;
+			}
+			
+		
+		</style>
+	</head>
+	<body>
+		<div id="box">
+			我是盒子
+		</div>
+		<script type="text/javascript">
+		
+			//devicePixelRatio 是设备像素比的意思
+			//window对象表示在浏览器中打开的窗口
+			//为了处理兼容性以防有些设备没有设备像素比 所以虚拟了一个数字1以防万一
+			var dpr=window.devicePixelRatio||1;//这句话的意思是在浏览器窗口上获取设备像素比的意思
+			//定义不同型号的手机缩放的比例变量
+			var scale =1/dpr;
+			//进行rem的适配 要使用width
+			var width =document.documentElement.clientWidth;
+			//获取到rem 适配的宽度 后要进行缩放meta比例
+			var meta=document.querySelector('meta[name="viewport"]');
+			//给meta设置content属性
+			meta.setAttribute('content','initial-scale='+scale);
+			//设置content属性之后 div的宽高都跟着改变了 要动态的改变回来 *dpr 倍
+			var styleN=document.createElement('style');
+			styleN.innerHTML='html {font-size: '+(width/16*dpr)+'px !important;}'
+			document.head.appendChild(styleN);
+		</script>
+	</body>
+</html>

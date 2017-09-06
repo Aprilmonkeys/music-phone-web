@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no" />
+		<title>竖向滑屏</title>
+		<!--1.造问本,2导入横向导航3因为想实现 即点即停的效果,但是有过渡,时间没到点击的时候停的位置总和点击的位置是不一样的
+			所以要模拟一个过渡的效果,
+		-->
+		<style type="text/css">
+			*{ margin: 0; padding: 0; } html,body { height: 100%; overflow: hidden; }
+			#wrap {
+				height: 100%;
+				width: 100%;
+			}
+			#scrollBar {
+				position: absolute;
+				top: 0;
+				right: 0;
+				width: 4px;
+				height: 100%;
+				background: red;
+				opacity: 0;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="wrap">
+			<div id="content">
+			</div>
+		</div>
+		<div id="scrollBar"></div>
+	</body>
+	<script type="text/javascript" src="js/transformCss.js"></script>
+    <script type="text/javascript" src="js/drag.js"></script>
+	<script type="text/javascript">
+		document.addEventListener('touchstart', function(event) {
+			event.preventDefault();
+		});
+		var wrap=document.getElementById('wrap');
+		var content=document.getElementById('content');
+		var scrollBar=document.getElementById('scrollBar');
+		//1造文本
+		var text = '';
+		for(var i = 0; i < 200; i++) {
+			text += i + '</br>';
+		}
+		content.innerHTML = text;
+		//滚动条的高度
+		var scale=document.documentElement.clientHeight/content.offsetHeight;
+		scrollBar.style.height=document.documentElement.clientHeight*scale+'px';
+		window.onload=function(){
+			var callback={
+				start:function(){
+					scrollBar.style.opacity='1';
+				},
+				move:function(){
+					scrollBar.style.opacity='1';
+					//滚动条的偏移量=内容的偏移量*scale
+					var dis=transformCss(content,'translateY')*scale;
+					transformCss(scrollBar,'translateY',-dis);
+				},
+				end:function(){
+					scrollBar.style.opacity='0';
+				}
+			}
+			nav(wrap,callback);
+		}
+
+
+</script>
+
+</html>

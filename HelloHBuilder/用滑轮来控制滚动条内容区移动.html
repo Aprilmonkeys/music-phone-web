@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>滚动条原始版</title>
+		<style type="text/css">
+			* {
+				margin: 0;
+				padding: 0;
+			}
+			
+			#wrap {
+				width: 40px;
+				height: 100%;
+				background-color: #CCCCCC;
+				position: absolute;
+				top: 0;
+				right: 0;
+			}
+			
+			#inner {
+				width: 40px;
+				height: 60px;
+				background-color: #3385FF;
+				position: absolute;
+				top: 0;
+				left: 0;
+			}
+			/*取消系统默认的滚动条*/
+			html,body{
+				overflow: hidden;
+				height: 100%;
+			}
+			#content {
+				position: absolute;
+				width: 100%;
+				top: 0;
+				left: 0;
+			}
+		</style>
+
+	</head>
+
+	<body>
+		<div id="content">
+		
+		</div>
+		<div id="wrap">
+			<div id="inner"></div>
+		</div>
+		<script>
+			
+//		ie/chrome onmousewheel(dom0)
+//		event.wheelDelta
+//		mac本是
+//		上-120
+//		下120
+//		Firefox  DOMMouseScroll(dom2)
+//		event.detail
+//		上-3
+//		下3
+	
+			//给inner动态添加内容 添加数字
+			var inner = document.getElementById('inner');
+			var content = document.getElementById('content');
+			//scale=滑块的高度/视口的高度
+			
+						var str='';
+						for(var i=0;i<100;i++){
+							str+=i+'<br>';
+						}
+					content.innerHTML=str;
+			var scale=document.documentElement.clientHeight/content.offsetHeight;
+			inner.style.height=document.documentElement.clientHeight*scale+'px';
+			
+			inner.onmousedown = function(e) {
+				//inner距离父元素的初始位置
+				var innertop = inner.offsetTop;
+				//鼠标的初始位置
+				var mousetop = e.clientY;
+				document.onmousemove = function(e) {
+					//鼠标的最终位置
+					var mouseend=e.clientY;
+					//inner 的此时拖动鼠标偏移量
+					var top =mouseend-mousetop+innertop;
+					//加判断条件  判断inner 的位置
+					if(top<0){
+						top=0
+					}else if(top>document.documentElement.clientHeight-inner.offsetHeight){
+						top=document.documentElement.clientHeight-inner.offsetHeight
+					}
+					inner.style.top=top+'px';
+					//给content 动态加一个高度 按比例添加的
+					//var scale=top/(document.documentElement.clientHeight-inner.offsetHeight);
+				    // content.style.top=document.documentElement.clientHeight*scale+'px';
+				//var scale=top(document.documentElement.clientHeight-inner.offsetHeight);//scale=滑块的偏移量/滑块走的最大距离
+				  content.style.top=-top/scale+'px';
+				}
+				document.onmouseup = function() {
+					document.onmousemove = null;
+					document.onmouseup = null;
+				}
+				return false;
+			}
+			//给document加滑轮 
+			//IE 谷歌
+			content.onmousewheel=fn;
+			//火狐
+			
+			content.addEventListener&&content.addEventListener('DOMMouseScroll',fn);
+			
+			//fn()函数的方法 
+			//定义鼠标滚轮的滑动方向 的标记
+			var flag='';
+			var add=0;
+			function fn(event){
+				
+				if(event.wheelDelta){
+					event=event||window.event
+					//添加 ie 谷歌的鼠标事件 要用的参数event.wheelDelta 这个参数是记录鼠标滚轮每次向上向下滑动的数字的 
+					//mac 向上是负数 -120 向下是120 判断鼠标的滚轮方向
+					if(event.wheelDelta<0){
+						//如果滚轮向上 得到的是负
+						flag='up';
+						add=-20;
+					}else{
+						flag='down';
+						add=20;
+					}
+				}else if(event.detail){
+					//火狐 鼠标滚轮事件 event.detail 这是参数 和clientX参数一样的 可读的 用正负数来记录滚轮的滚动方向的
+					//-3 是向上滚动一次 3是想下滚动一次
+					event=event||window.event
+					if(event.detail<0){
+						falg='up';
+						add=-20;
+					}else{
+						flag='down';
+						add=20;
+					}
+				}
+				//定义滑块滚动滑轮的偏移量
+				var innerTop=inner.offsetTop+add;
+				if(innerTop<0){
+					innerTop=0;
+				}else if(innerTop>document.documentElement.clientHeight-inner.offsetHeight){
+					innerTop=document.documentElement.clientHeight-inner.offsetHeight
+				}
+			//把定义的flag ,up ,down,写到逻辑里 可以用if===或者switch
+			switch(flag){
+				case 'up':
+				//内容偏移量=滑块偏移量/scale
+				content.style.top=-innerTop/scale+'px';
+				
+				inner.style.top=innerTop+'px';
+				break;
+				case 'down':
+				content.style.top=-innerTop/scale+'px';
+				
+				inner.style.top=innerTop+'px';
+				break;
+			}
+			event.preventDefault&&event.preventDefault();
+			return false;
+			}
+		</script>
+	</body>
+
+</html>

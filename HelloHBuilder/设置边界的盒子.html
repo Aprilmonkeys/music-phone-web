@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="initial-scale=0.5,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<style type="text/css">
+			* {
+				margin: 0;
+				padding: 0;
+			}
+			#div {
+				width: 100px;
+				height: 100px;
+				background-color: #3385FF;
+				position: absolute;
+				top: 0;
+				left: 0;
+				
+			}
+			
+		</style>
+	</head>
+	<body>
+		<div id="div">
+			w 四盒子
+		</div>
+		
+		<script type="text/javascript">
+			var box =document.getElementById('div');
+			//定义元素的初始位置 
+			var elementP={
+				top:0,
+				left:0
+			}
+			//定于鼠标初始位置
+			var startP={
+				left:0,
+				top:0
+			}
+			//鼠标按下
+			box.onmousedown=function(event){
+				//兼容
+				event=event||window.event;
+				//定义元素的初始位置 
+				elementP.left=box.offsetLeft;
+				elementP.top=box.offsetTop;
+				//定于鼠标初始位置
+				startP.left=event.clientX;
+				startP.top=event.clientY;
+				//鼠标移动
+				document.onmousemove=function(event){
+					//鼠标的结束位置
+				var endP={
+					left:0,
+					top:0
+				}
+				endP.left=event.clientX;
+				endP.top=event.clientY;
+				//鼠标滑动的距离差
+				var disL=endP.left-startP.left;
+				var disT=endP.top-startP.top;
+				//给盒子的移动距离 加上限制 到边上的时候不能移动
+				var left=elementP.left+disL
+				var top=elementP.top+disT
+				if(left<0){
+					left=0
+					console.log(left);
+				}else if(left>document.documentElement.clientWidth-box.offsetWidth){
+					left=document.documentElement.clientWidth-box.offsetWidth
+				}
+				if(top<50){
+					top=0
+				}else if(top>document.documentElement.clientWidth-box.offsetWidth-50){
+					top=document.documentElement.clientWidth-box.offsetWidth-50
+				}
+				//给盒子添加偏移量 不要忘了加px;
+				box.style.left=left+'px';
+				box.style.top=top+'px';
+				}//鼠标无法松开 黏连盒子
+				//添加鼠标离开事件
+			
+				document.onmouseup=function(){
+					document.onmousemove=null;
+					document.onmouseup=null;
+				}
+				//取消浏览器默认行为  浏览器的默认行为是文字会自动到地址栏里
+				return false;
+			}
+		</script>
+	</body>
+</html>

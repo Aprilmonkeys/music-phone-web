@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>transform写的功能</title>
+		<style type="text/css">
+			*{
+				margin: 0;
+				padding: 0;
+			}
+			#box {
+			width: 100px;
+			height: 100px;
+			background: #FF1493;
+			/*transform: translate(100px) scale(0.5); 动态写在js里*/
+			/*transform: scale(0.5); 直接写会造成覆盖效果 */
+			}
+		</style>
+	</head>
+	<body>
+		<div id='box'>
+			
+		</div>
+		<script>
+			//transform 写的功能 用函数写 3个参数
+			var box=document.getElementById('box');
+			transformCss(box,'scale',0.5);
+			// box.style.transform='translate(100px)';
+			//transformCss(box,'scale',0.5);
+			//transformCss(box,'rotate',45)
+			//transformCss() 读 2个参数
+				//transformCss(box,'translate');
+				//transformCss(box,'scale');
+			function transformCss(node,name,value){
+				//定义一个没有属性 取反 是为了执行 当前的语句 创建一个空对象
+				if(!node.aaa){
+					node.aaa={};//创建一个空对象 
+				}
+				//判断参数的个数
+				if(arguments.length>2){
+					//写 把名值对的内容添加到对象中
+					node.aaa[name]=value;
+					//最终输出的结果 translateX(100px)
+					var result='';
+					//遍历对象中的每一个属性 for in
+					for(var item in node.aaa){
+						switch (item){
+							//平移
+							case 'translate':
+							case 'translateX':
+							case 'translateY':
+							result+=item+'('+node.aaa[item]+'px)'
+								break;
+								//缩放
+							case 'scale':
+							case 'scaleX':
+							case 'scaleY':
+							result+=item+'('+node.aaa[item]+')'
+								break;
+								//扭曲
+							case 'skew':
+							case 'skewX':
+							case 'skewY':
+							result+=item+'('+node.aaa[item]+'deg)'
+								break;
+						}
+					}
+					console.log(result);
+					node.style.transform=result;
+				}else{
+					
+				}
+			}
+		</script>
+	</body>
+</html>

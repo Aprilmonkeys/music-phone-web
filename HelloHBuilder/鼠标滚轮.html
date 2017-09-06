@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			*{
+				margin: 0;
+				padding: 0;
+			}
+			#box {
+				width: 100px;
+				height: 100px;
+				background: #3385FF;
+			}
+		</style>
+	</head>
+	<!--
+		ie/chrome onmousewheel(dom0)
+		event.wheelDelta
+		mac本是
+		上-120
+		下120
+		Firefox  DOMMouseScroll(dom2)
+		event.detail
+		上-3
+		下3
+	-->
+	<body>
+		<div id="box">
+		</div>
+		<script type="text/javascript">
+			//滚轮向上的时候盒子的高度变小,向下的时候盒子的高度变大
+			var box=document.getElementById('box');
+			//定义一个标识 标记滚轮的滚动方向
+			var flag='';
+			//ie/chrome onmousewheel(dom0)
+			box.onmousewheel=fn;
+			//FirefoxDOMMouseScroll(dom2)  ie8 以下不支持 dom2 要兼容
+			
+			//box.addEventListener&&box.addEventListener('DOMMouseScroll',fn)
+			if(box.addEventListener){
+				box.addEventListener('DOMMouseScroll',fn);
+			}
+			function fn(event){
+				event=event||window.event;
+				//判断是使用IE 谷歌浏览器 还是火狐
+				if(event.wheelDelta){
+					console.log(event.wheelDelta);//
+				
+					if(event.wheelDelta<0){
+						//向上
+						flag='up';
+					}else{
+						//向下
+						flag='down'
+					}
+				}else if(event.detail){
+					if(event.detail<0){
+						//向上
+						flag='up';
+					}else{
+						flag='down';
+					}
+				}
+				//为变量flag 添加向上和向下的逻辑语句
+				//用if或者switch
+				if(flag==='up'){
+					if(box.offsetHeight-10===0){
+						return false;
+					}
+					box.style.height=box.offsetHeight-10+'px';
+				}else if(flag==='down'){
+					box.style.height=box.offsetHeight+10+'px';
+				}
+				//取消系统默认行为
+				//ie8兼容 处理
+				//event.preventDefault();
+				event.preventDefault&&event.preventDefault();
+				return false;
+				
+				
+			}
+			
+		</script>
+	</body>
+</html>

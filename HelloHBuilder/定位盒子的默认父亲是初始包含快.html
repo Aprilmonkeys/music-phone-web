@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			/*当这样写的时候,页面什么也不显示 没有任何显示 因为 没有生效的高度
+			 *  默认情况下 body 和HTML都是没有高度的
+			 * 
+			 * #box {
+				
+				width: 100%;
+				height: 100%;
+				background: #FF1493;
+			}
+			*/
+			/*开启了绝对定位之后,页面会显示出来整平的红色 盒子会成功显示
+			 这是因为,定位的盒子会找父亲,而 body 和HTML都没有定位 #box 的父亲就是初始包含快
+			 初始包含快是和视口一样大小的矩形有高度 所以会整平显示
+			 * */
+			#box {
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				background: #FF1493;
+			
+		
+		</style>
+	</head>
+	<body>
+		<div id="box"></div>
+	</body>
+</html>

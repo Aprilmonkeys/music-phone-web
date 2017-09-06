@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>滚动条合并</title>
+		<style type="text/css">
+			* {
+				margin: 0;
+				padding: 0;
+			}
+			
+			#wrap {
+				width: 40px;
+				height: 100%;
+				background-color: #CCCCCC;
+				position: absolute;
+				top: 0;
+				right: 0;
+			}
+			
+			#inner {
+				width: 40px;
+				height: 60px;
+				background-color: #3385FF;
+				position: absolute;
+				top: 0;
+				left: 0;
+			}
+			/*取消系统默认的滚动条*/
+			
+			html,
+			body {
+				overflow: hidden;
+				height: 100%;
+			}
+			#content {
+				width: 100%;
+			     /*height: 0px;  高度是动态获取的 不能设置 */
+				position: absolute; 
+			}
+		</style>
+	</head>
+
+	<body>
+		<!--有2点 1 可以根据内容的多少动态的设置 滚动条的大小 2通过这个设置比例 可以总结出更简单的比例关系
+			inner的高度/视口的高度=视口的高度/内容的高度
+			scale=视口的高度/内容的高度 这相当于1个值 
+			
+		-->
+		<div id="content">
+
+		</div>
+		<div id="wrap">
+			<div id="inner">
+
+			</div>
+		</div>
+		<script>
+			var content = document.getElementById('content');
+			var inner = document.getElementById('inner');
+			var wrap = document.getElementById('wrap');
+			//给内容的盒子添加内容''
+			var text = '';
+			for(var i = 0; i < 1000; i++) {
+				text += i + '<br>';
+			}
+			content.innerHTML = text;
+			//接下来要用的公式 inner高度/视口高=视口高/内容高
+			var scale = document.documentElement.clientHeight / content.offsetHeight;
+			inner.style.height = document.documentElement.clientHeight * scale + 'px';
+			//取消系统默认滚动条 自己写滚动条
+			inner.onmousedown = function(e) {
+				//inner距离父元素的初始位置
+				var innertop = inner.offsetTop;
+				//鼠标的初始位置
+				var mousetop = e.clientY;
+				document.onmousemove = function(e) {
+					//鼠标的最终位置
+					var mouseend = e.clientY;
+					//inner 的偏移量
+					var top = mouseend - mousetop + innertop;
+					//加判断条件  判断inner 的位置
+					if(top<0){
+						top=0
+					}else if(top>document.documentElement.clientHeight-inner.offsetHeight){
+						top=document.documentElement.clientHeight-inner.offsetHeight
+					}
+					inner.style.top=top+'px';
+					//给content 动态加一个高度 按比例添加的
+					//var scale=top/(document.documentElement.clientHeight-inner.offsetHeight);
+				  //content.style.top=-(content.offsetHeight-document.documentElement.clientHeight)*scale+'px';
+				   
+				    content.style.top=-top/scale+'px';
+
+				}
+				document.onmouseup = function() {
+					document.onmousemove = null;
+					document.onmouseup = null;
+				}
+				return false;
+			}
+		</script>
+	</body>
+
+</html>
